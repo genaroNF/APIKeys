@@ -14,7 +14,7 @@ import logging
 # Create your models here.
 logger = logging.getLogger('django')
 
-class APIKey (models.Model):
+class AbstractAPIKey (models.Model):
     """
     API key with a prefix to identify the owner of the api key
     the key will be stored hashed for security
@@ -30,7 +30,7 @@ class APIKey (models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.key = make_password(self.key)
-        return super(APIKey, self).save(*args, **kwargs)
+        return super(AbstractAPIKey, self).save(*args, **kwargs)
 
     def generateKeys(self):
         logger.info("OK")
@@ -45,11 +45,17 @@ class Test(models.Model):
     test1 = models.CharField(max_length=11, default='123')
 
 
-class APIKey2 (APIKey):
+class APIKey2 (AbstractAPIKey):
     """
     API key with a prefix to identify the owner of the api key
     the key will be stored hashed for security
     """
     user = models.ForeignKey(Test, on_delete=models.CASCADE, null=True)
 
+class APIKey (AbstractAPIKey):
+    """
+    API key with a prefix to identify the owner of the api key
+    the key will be stored hashed for security
+    """
+    pass
     

@@ -2,14 +2,13 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin, messages
-from .models import APIKey
+from .models import APIKey, APIKey2
 import logging
 # Register your models here.
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 
 class APIKeyAdmin (admin.ModelAdmin):
-    fields=['name', 'is_active', 'user']
     readonly_fields=['prefix']
     list_display= ['name', 'prefix', 'is_active']
 
@@ -29,10 +28,15 @@ class APIKeyAdmin (admin.ModelAdmin):
         super(APIKeyAdmin, self).save_model(request, obj, form, change)
 
     def get_fields(self, request, obj=None):
+        fields=['name', 'is_active']
         if obj:
-            return ['name', 'prefix', 'is_active']
-        return self.fields
+            fields.insert(1, 'prefix')
+        if hasattr(self.model, 'user'):
+            fields.insert(1, 'user')
+        return fields
 
+class APIKeyAdmin2 (APIKeyAdmin):
+    pass
+
+admin.site.register(APIKey2, APIKeyAdmin2)
 admin.site.register(APIKey, APIKeyAdmin)
-
-

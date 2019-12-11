@@ -4,7 +4,9 @@ from django.shortcuts import render
 from .models import APIKey2, Test
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
-from .authentication import BasicHTTPApiKeyAuthentication, ApiKeyAuthentication
+from .authentication import ApiKey2Authentication, BasicHTTPApiKeyAuthentication
+from rest_framework.permissions import IsAuthenticated, OR
+from .permissions import IsNotAnonymousUser
 
 import logging
 
@@ -22,7 +24,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
-    authentication_classes = [ApiKeyAuthentication, BasicHTTPApiKeyAuthentication]
+    authentication_classes = [ApiKey2Authentication, BasicHTTPApiKeyAuthentication]
+    permission_classes = [IsNotAnonymousUser]
     queryset = Test.objects.all()
     serializer_class = UserSerializer
 

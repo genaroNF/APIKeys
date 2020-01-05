@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin, messages
-from .models import APIKey, APIKey2
+from .models import APIKey, APIKey2, Test
 import logging
 # Register your models here.
 logger = logging.getLogger('django')
@@ -38,5 +38,9 @@ class APIKeyAdmin (admin.ModelAdmin):
 class APIKeyAdmin2 (APIKeyAdmin):
     pass
 
+class TestAdmin (admin.ModelAdmin):
+    pass
+
+admin.site.register(Test, TestAdmin)
 admin.site.register(APIKey2, APIKeyAdmin2)
 admin.site.register(APIKey, APIKeyAdmin)

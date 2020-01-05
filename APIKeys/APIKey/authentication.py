@@ -20,6 +20,7 @@ class ApiKeyAuthentication(TokenAuthentication):
     header = None
     header_text = ''
     base64_encoded = False
+    start_index = 0 
 
     def get_token_from_auth_header(self, auth):
         auth = auth.split()
@@ -33,9 +34,9 @@ class ApiKeyAuthentication(TokenAuthentication):
 
         try:
             if self.base64_encoded:
-                return base64.b64decode(auth[1].decode()).decode()
+                return base64.b64decode(auth[1].decode()).decode()[self.start_index:]
             else:
-                return auth[1].decode()
+                return auth[1].decode()[self.start_index:]
         except UnicodeError:
             raise AuthenticationFailed('Invalid token header. Token string should not contain invalid characters.')
 
@@ -44,7 +45,6 @@ class ApiKeyAuthentication(TokenAuthentication):
         if self.header is not None and auth is b'':
             auth = request.META.get(self.header, '').encode(HTTP_HEADER_ENCODING)
         token = self.get_token_from_auth_header(auth)
-        
         
         if token:
             return self.authenticate_credentials(token)
@@ -81,3 +81,4 @@ class BasicHTTPApiKeyAuthentication(ApiKeyAuthentication):
     model = APIKey2
     header_text = 'basic'
     base64_encoded = True
+    start_index = 1

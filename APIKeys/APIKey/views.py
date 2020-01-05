@@ -24,7 +24,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
-    authentication_classes = [ApiKey2Authentication, BasicHTTPApiKeyAuthentication]
+    authentication_classes = [ApiKey2Authentication]
     permission_classes = [IsNotAnonymousUser]
     queryset = Test.objects.all()
     serializer_class = UserSerializer

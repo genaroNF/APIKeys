@@ -23,6 +23,7 @@ class AbstractAPIKey (models.Model):
     prefix = models.CharField(max_length=16, unique=True, null=True, blank=True)
     key = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    user = None
 
     class Meta: 
         abstract = True
